@@ -1,19 +1,41 @@
 import os
 import shutil
-from tkinter import *
-import tkinter.messagebox as tmsg
 import tkinter as tk
-root = Tk()
+from tkinter import filedialog
+import datetime
+import glob
 
-root.title('File organizer')
-path=StringVar()
-textbox1=Entry(root,textvariable=path)
-textbox1.grid(row=0,column=1)
+#functions
 
 def submit():
-    path=textbox1.get()
+    print('submitted')
+    path=path_entry.get()
     list=os.listdir(path)
+    path_dir=path_entry.get()
+    sort_option=sort_var.get()
+    for files in os.walk(path_dir):
+        if sort_option=='Alphabetical':
+            
+            sorted(path_dir)
+        
+        else:
+            print('datewise')
+            '''sorted_items = ext(files, key=lambda item: os.path.getctime(os.path.join(path_dir,files))                        )
+            return sorted_items'''
+            files=path
+            # Use the glob module to find all files in the current directory with a ".txt" extension.
+            files = glob.glob("*.txt")
 
+            # Sort the list of file names based on the modification time (getmtime) of each file.
+            files.sort(key=os.path.getmtime)
+
+            # Print the sorted list of file names, one per line.
+            print("\n".join(files))
+
+            #path_dir.sort(key=lambda date: datetime.strptime(date, "%m-%Y"))
+
+            #readList[path_dir]=datetime.strptime(readList[path_dir],"%d/%m/%Y")
+            #path_dir.sort(key=lambda x: os.path.getmtime(os.path.join(directory, x)))
 
     for file in list:
        name,ext=os.path.splitext(file)
@@ -24,46 +46,41 @@ def submit():
        else:
           os.makedirs(path+'/'+ext)
           shutil.move(path+'/'+file,path+'/'+ext+'/'+file)
-       '''if radio.get()=='alphabetical':
-           file.sort()
-           print('files moved alphabetically')
-       else:
-           print('Numeric')'''
+       
     print('Your files are successfully moved')
-    exit()
-    
-    
-        
     
 
-label0=Label(root,text='Enter the path= ',fg='blue',font=('Arial',14))
-label0.grid(row=0,column=0,padx=5,pady=10)
+
+#def sort_var():
 
 
+#create GUI
+root=tk.Tk()
+root.title("file_organizer")
 
+#input as path
 
-             
+tk.Label(root,text="enter your path= ").pack()
+path_entry=tk.Entry(root)
+path_entry.pack()
 
-label1=Label(root,text="which way you wanna organize your files?",font="lucida 11 bold")
-label1.grid(row=1,column=1,padx=0,pady=0)
+#creating radio buttons for choice
 
+sort_var=tk.StringVar()
+sort_var.set("Alphabetical")
 
-var=StringVar()
-var.set("radio")
+alpha_radio=tk.Radiobutton(root,text="Alphabetical", variable=sort_var, value="Alphabetical")
+alpha_radio.pack()
 
-radio=Radiobutton(root,text="Alphabetical",padx=14,variable=var,value='alphabetical',anchor="w")
-radio.grid(row=2,column=1)
+date_radio = tk.Radiobutton(root, text="Date-wise", variable=sort_var, value="Date-wise")
+date_radio.pack()
 
-radio=Radiobutton(root,text="Numeric",padx=14,variable=var,value='Numeric',anchor="w")
-radio.grid(row=3,column=1)
+#creating submit button
 
-
-button=Button(root,command=submit,text='Submit')
-button.grid(row=4,column=1,padx=15,pady=30,sticky=W)
-
+s_b=tk.Button(root,text="Submit",command=submit)
+s_b.pack()
 
 root.mainloop()
-submit()
 
 
 
@@ -83,5 +100,3 @@ submit()
 
 
 
-
-           
